@@ -1,7 +1,12 @@
+import logging
+
 from telegram import Update, Bot
 
-from spam_bot.defines import BAD_STRINGS, CHAT_TO_SEND, TOKEN
+from spam_bot.defines import BAD_STRINGS, TOKEN, CHAT_TO_CHANNEL
 from spam_bot.utils import contains_card_number
+
+
+logger = logging.getLogger(__name__)
 
 
 def detector(data: dict):
@@ -17,24 +22,25 @@ def detector(data: dict):
         return {}
 
     if _detect_message(message):
-        data = {
-            'chat_id': CHAT_TO_SEND,
-            'from_chat_id': chat_id,
-            'message_id': message.message_id,
-        }
+        recipient = CHAT_TO_CHANNEL.get(message.chat.username) or CHAT_TO_CHANNEL['krakivets_help']
+
         bot = Bot(TOKEN)
         if message.chat.username:
-            print(
+            logger.info(
                 bot.send_message(
-                    chat_id=CHAT_TO_SEND,
+                    chat_id=recipient,
                     text=f'https://t.me/{message.chat.username}/{message.message_id}/',
                 )
             )
 
         else:
-            print('No chat username.')
+            logger.info('No chat username.')
 
-        print(bot.forward_message(**data))
+        logger.info(bot.forward_message(
+            chat_id=recipient,
+            from_chat_id=chat_id,
+            message_id=message.message_id,
+        ))
 
         return {}
 
