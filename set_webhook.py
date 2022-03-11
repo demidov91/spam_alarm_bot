@@ -22,15 +22,21 @@ def run(host):
 
 
 def remove_webhook():
-    print(
-        bot.set_webhook(''),
-    )
+    print(bot.set_webhook(''))
+    print(bot.get_webhook_info())
+
+
+def get_webhook():
     print(bot.get_webhook_info())
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        run(sys.argv[1])
+        if sys.argv[1] != '?':
+            run(sys.argv[1])
+
+        else:
+            get_webhook()
 
     else:
         remove_webhook()

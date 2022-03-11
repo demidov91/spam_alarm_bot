@@ -1,6 +1,7 @@
 from telegram import Update, Bot
 
 from spam_bot.defines import BAD_STRINGS, CHAT_TO_SEND, TOKEN
+from spam_bot.utils import contains_card_number
 
 
 def detector(data: dict):
@@ -46,6 +47,4 @@ def _detect_message(message):
 
     if message.text:
         lower_text = message.text.lower()
-        return any(x in lower_text for x in BAD_STRINGS)
-
-
+        return any(x in lower_text for x in BAD_STRINGS) or contains_card_number(lower_text)
