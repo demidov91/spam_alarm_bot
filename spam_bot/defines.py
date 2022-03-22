@@ -8,6 +8,7 @@ BAD_STRINGS = [
     'зсу',
     'хлопц',
     'мужчин',
+    'чоловік',
 ]
 
 TOKEN = os.environ['TOKEN']
